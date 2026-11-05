@@ -1,0 +1,13 @@
+[package]
+name = "discord-launcher"
+version = "1.0.0"
+description = "Discord Stable, PTB and Canary launcher"
+authors = ["You"]
+edition = "2021"
+
+[build-dependencies]
+tauri-build = { version = "2", features = [] }
+
+[dependencies]
+serde = { version = "1", features = ["derive"] }
+tauri = { version = "2", features = [] }
