@@ -3,5 +3,11 @@
   "identifier": "default",
   "description": "Main launcher window and embedded Discord webview",
   "windows": ["main"],
-  "permissions": ["core:default", "core:webview:allow-create-webview"]
+  "permissions": [
+    "core:default",
+    "core:webview:allow-create-webview",
+    "core:webview:allow-webview-close",
+    "core:webview:allow-set-webview-position",
+    "core:webview:allow-set-webview-size"
+  ]
 }
