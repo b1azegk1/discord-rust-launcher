@@ -10,18 +10,16 @@
     "frontendDist": "../dist"
   },
   "app": {
-    "windows": [
-      {
-        "title": "Discord Launcher",
-        "width": 1000,
-        "height": 780,
-        "minWidth": 680,
-        "minHeight": 650,
-        "resizable": true,
-        "center": true,
-        "decorations": true
-      }
-    ],
+    "windows": [{
+      "title": "Discord Launcher",
+      "width": 1000,
+      "height": 780,
+      "minWidth": 680,
+      "minHeight": 650,
+      "resizable": true,
+      "center": true,
+      "decorations": true
+    }],
     "security": {
       "csp": "default-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src ipc: http://ipc.localhost"
     }
@@ -29,12 +27,11 @@
   "bundle": {
     "active": true,
     "targets": ["nsis", "msi"],
+    "icon": ["icons/icon.ico"],
     "shortDescription": "A Discord channel launcher",
     "category": "Utility",
     "windows": {
-      "nsis": {
-        "displayLanguageSelector": false
-      }
+      "nsis": {"displayLanguageSelector": false}
     }
   }
 }
