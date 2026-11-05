@@ -1,32 +1,42 @@
-# Discord Launcher (Rust + Tauri 2)
+# Discord Rust Launcher
 
-Windows 10/11 desktop launcher for Discord Stable, PTB and Canary.
+A Windows 10/11 desktop shell built with Rust + Tauri 2. It opens the official Discord web app inside its own window.
 
-## Features
-- Detects the three Discord channels in the current Windows user's Local AppData.
-- Launches the selected channel directly.
-- Optional custom launch arguments.
-- Requests update checks using each channel's bundled `Update.exe`.
-- Discord-inspired dark UI with animated background, channel cards and status messages.
+## Build on Windows
 
-## Build on GitHub Actions
-Every push to `main` or `master` starts a Windows x64 build. Open the **Actions** tab and download the `DiscordLauncher-Windows-x64` artifact after the workflow completes.
+Requirements:
+- Windows 10 or 11 (x64)
+- Node.js 20+
+- Rust stable (install with https://rustup.rs/)
+- Microsoft C++ Build Tools with the MSVC toolchain
+- WebView2 Runtime
 
-The artifact includes the app executable and NSIS `.exe` / MSI installers. No Rust, Node.js or Visual Studio Build Tools are needed on your PC.
+After installing the requirements, double-click **build-windows.bat** in the project folder. It installs the frontend packages and runs the Tauri release build.
 
-## Local development
-Requirements: Windows 10/11, Node.js 20+, Rust stable, Microsoft C++ Build Tools and WebView2 Runtime.
+The installers are written to:
+
+`src-tauri/target/release/bundle/`
+
+The standalone executable is:
+
+`src-tauri/target/release/discord-launcher.exe`
+
+You can also build from PowerShell:
 
 ```powershell
 npm install
-npm run tauri dev
 npm run tauri build
 ```
 
-Build output: `src-tauri/target/release/bundle/`.
+## GitHub Actions
+
+Every push to `main` or `master` starts a Windows x64 build. Open the **Actions** tab and download the `DiscordLauncher-Windows-x64` artifact after the workflow completes.
+
+Rust compilation is cached between builds, and superseded builds on the same branch are cancelled automatically.
 
 ## Notes
-- Update checks call Discord's own `Update.exe --checkForUpdates`; the launcher reports that the request was started, not the final update result.
-- The launcher does not download Discord from unofficial sources or modify Discord files.
-- Detection checks `%LOCALAPPDATA%\Discord`, `DiscordPTB` and `DiscordCanary`, including `app-*` version folders.
+
+- The embedded client loads https://discord.com/app. Sign in with your Discord account there.
+- This project does not bundle or modify the official Discord desktop application.
+- PTB and Canary are separate desktop release channels; this embedded web client uses the official Discord web app.
 - This app is not affiliated with Discord, Inc. and is not digitally signed. Windows SmartScreen may show a warning for unsigned builds.
