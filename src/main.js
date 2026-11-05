@@ -16,13 +16,14 @@ function toast(message) {
 }
 
 async function createDiscordView() {
+  const scale = await appWindow.scaleFactor();
   const size = await appWindow.innerSize();
   discordView = new Webview(appWindow, "discord-webview", {
     url: "https://discord.com/app",
     x: 252,
     y: 58,
-    width: Math.max(320, size.width - 252),
-    height: Math.max(300, size.height - 58),
+    width: Math.max(320, Math.floor(size.width / scale) - 252),
+    height: Math.max(300, Math.floor(size.height / scale) - 58),
     focus: true,
     backgroundColor: "#313338"
   });
@@ -40,9 +41,10 @@ async function createDiscordView() {
 
 async function resizeDiscordView() {
   if (!discordView) return;
+  const scale = await appWindow.scaleFactor();
   const size = await appWindow.innerSize();
   await discordView.setPosition(new LogicalPosition(252, 58));
-  await discordView.setSize(new LogicalSize(Math.max(320, size.width - 252), Math.max(300, size.height - 58)));
+  await discordView.setSize(new LogicalSize(Math.max(320, Math.floor(size.width / scale) - 252), Math.max(300, Math.floor(size.height / scale) - 58)));
 }
 
 $("#reload-button").addEventListener("click", async () => {
