@@ -1,11 +1,11 @@
 import { Webview } from "@tauri-apps/api/webview";
 import { getCurrentWindow } from "@tauri-apps/api/window";
+import { LogicalPosition, LogicalSize } from "@tauri-apps/api/dpi";
 import "./style.css";
 
 const appWindow = getCurrentWindow();
 const $ = (selector) => document.querySelector(selector);
 let discordView;
-let resizeUnlisten;
 
 function toast(message) {
   const el = $("#toast");
@@ -16,15 +16,13 @@ function toast(message) {
 }
 
 async function createDiscordView() {
-  const scale = await appWindow.scaleFactor();
   const size = await appWindow.innerSize();
-  const sidebarWidth = 252;
   discordView = new Webview(appWindow, "discord-webview", {
     url: "https://discord.com/app",
-    x: sidebarWidth,
-    y: 0,
-    width: Math.max(320, Math.floor(size.width / scale) - sidebarWidth),
-    height: Math.floor(size.height / scale),
+    x: 252,
+    y: 58,
+    width: Math.max(320, size.width - 252),
+    height: Math.max(300, size.height - 58),
     focus: true,
     backgroundColor: "#313338"
   });
@@ -42,10 +40,9 @@ async function createDiscordView() {
 
 async function resizeDiscordView() {
   if (!discordView) return;
-  const scale = await appWindow.scaleFactor();
   const size = await appWindow.innerSize();
-  await discordView.setPosition({ x: Math.round(252 * scale), y: 0 });
-  await discordView.setSize({ width: Math.max(320, size.width - Math.round(252 * scale)), height: size.height });
+  await discordView.setPosition(new LogicalPosition(252, 58));
+  await discordView.setSize(new LogicalSize(Math.max(320, size.width - 252), Math.max(300, size.height - 58)));
 }
 
 $("#reload-button").addEventListener("click", async () => {
@@ -59,12 +56,7 @@ $("#reload-button").addEventListener("click", async () => {
   await createDiscordView();
 });
 
-appWindow.onResized(() => resizeDiscordView().catch(() => {})).then((unlisten) => {
-  resizeUnlisten = unlisten;
-});
-window.addEventListener("beforeunload", () => {
-  if (resizeUnlisten) resizeUnlisten();
-});
+appWindow.onResized(() => resizeDiscordView().catch(() => {}));
 createDiscordView().catch((error) => {
   $("#loading h1").textContent = "Не удалось запустить WebView";
   $("#loading p").textContent = String(error);
